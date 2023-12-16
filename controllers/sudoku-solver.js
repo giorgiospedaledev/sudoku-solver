@@ -18,6 +18,10 @@ class SudokuSolver {
       throw new Error("Puzzle cannot be solved");
     }
 
+    
+
+
+
     return true;
   }
 
@@ -52,6 +56,12 @@ class SudokuSolver {
   solve(puzzleString) {
     const initialState = puzzleString;
     let currentState = puzzleString;
+    try {
+      this.validate(puzzleString);
+    } catch(e) {
+      throw new Error("Puzzle cannot be solved");
+    }
+    
 
     function setCharAt(str, index, chr) {
       if (index > str.length - 1) return str;
@@ -91,11 +101,34 @@ class SudokuSolver {
       }
       times++;
     }
+
+    
+    // check if Each row contains unique values from 1-9.
+    // check Each column contains unique values from 1-9.
+    // check  Each of the 9 sub-squares, of size 3x3, ​contains a unique value from 1-9.
+
     if (times == 10) {
       throw new Error("Puzzle cannot be solved")
     }
+
+    for (let value = 1; value <= 9; value++) {
+      
+      for (let i = 0; i < 9; i++) {
+        let count = 0;
+        for (let j = 0; j < 9; j++) {
+          if (currentState.charAt(i * 9 + j) == value.toString()) {
+            count++;
+            if (count > 1) {
+              throw new Error("Puzzle cannot be solved");
+            }
+          }
+        }
+      }
+    }
+
     return currentState;
   }
+
 }
 
 module.exports = SudokuSolver;
